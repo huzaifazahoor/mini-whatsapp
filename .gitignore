@@ -1,0 +1,15 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Redis local dump (if any lands in the repo dir)
+dump.rdb
+appendonly.aof
+appendonlydir/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

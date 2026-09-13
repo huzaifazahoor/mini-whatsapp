@@ -1,0 +1,27 @@
+# docker-compose.yml
+# Runs Redis for the offline pending message queue.
+#
+# Start it:   docker compose up -d
+# Check it:   docker compose ps
+# Logs:       docker compose logs -f redis
+# CLI in:     docker exec -it whatsapp-redis redis-cli
+# Stop it:    docker compose down
+# Wipe data:  docker compose down -v   (removes the volume too)
+
+services:
+  redis:
+    image: redis:7-alpine          # small, official Redis image
+    container_name: whatsapp-redis
+    ports:
+      - "6379:6379"                # host:container. Your Python app connects to localhost:6379
+    volumes:
+      - redis-data:/data           # keep data if the container restarts
+    command: ["redis-server", "--appendonly", "yes"]   # AOF persistence on
+    healthcheck:                   # so 'docker compose ps' shows healthy
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis-data:
